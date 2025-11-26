@@ -54,6 +54,38 @@ public class Old_methods {
 		}
 		
 		char[][]tablero=new char[Assets.BOARD_ROWS][Assets.BOARD_COLUMNS];
+
+
+public static String getImage(String[]gameDeck,int fil,int col) {
+	String imagen;
+	char simbolo;
+	//Inicializa imagen en vacío
+	if (fil<Assets.BOARD_ROWS/2)
+		imagen=""+Assets.NO_POSITION+Assets.NO_POSITION;
+		else
+		imagen="  ";
+	//Busca en todo el vector
+	for(int i=0; i < gameDeck.length; i++) {
+		if(gameDeck[i].length()!=0) {
+			int filCarta = gameDeck[i].charAt(1) - '0'; 
+			int colCarta = gameDeck[i].charAt(2) - '0';
+			
+			if((filCarta==fil)&&(colCarta==col)) {
+				simbolo = gameDeck[i].charAt(0);								
+				switch(simbolo) {
+				case 'A': 	imagen=Assets.ARCHER_IMAGE;break;
+				case 'D': 	imagen=Assets.DRAGON_IMAGE;break;
+				case 'P': 	imagen=Assets.PRINCESS_IMAGE;break;
+				case 'V': 	imagen=Assets.VALKYRIE_IMAGE;break;
+				case 'G': 	imagen=Assets.GOBLIN_IMAGE;break;
+				case 'K': 	imagen=Assets.PK_IMAGE;break;
+				}
+						
+			}
+		}
+	}
+	return imagen;
+}
 }
 
 

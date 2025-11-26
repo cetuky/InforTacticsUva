@@ -46,22 +46,16 @@ public class InfortacticsUVa {
 						imagen="  ";
 					//Busca en todo el vector
 					for(int i=0; i < gameDeck.length; i++) {
-						int filCarta = gameDeck[i].charAt(1) - '0'; 
-						int colCarta = gameDeck[i].charAt(2) - '0';
-						
-						if((filCarta==fil)&&(colCarta==col)) {
-							simbolo = gameDeck[i].charAt(0);
-							switch(simbolo) {
-							case 'A': 	imagen=Assets.ARCHER_IMAGE;break;
-							case 'D': 	imagen=Assets.DRAGON_IMAGE;break;
-							case 'P': 	imagen=Assets.PRINCESS_IMAGE;break;
-							case 'V': 	imagen=Assets.VALKYRIE_IMAGE;break;
-							case 'G': 	imagen=Assets.GOBLIN_IMAGE;break;
-							case 'K': 	imagen=Assets.PK_IMAGE;break;
+						if(gameDeck[i].length()!=0) {
+							int filCarta = gameDeck[i].charAt(1) - '0'; 
+							int colCarta = gameDeck[i].charAt(2) - '0';
+							
+							if((filCarta==fil)&&(colCarta==col)) {
+								simbolo = gameDeck[i].charAt(0);
+								imagen = getImage(simbolo);		
 							}
-									
-							}
-				}
+						}
+					}
 				System.out.print(" | "+imagen);
 			}
 			System.out.println(" |");
@@ -72,14 +66,55 @@ public class InfortacticsUVa {
 			System.out.println();
 	}
 	
+	public static String getImage(char simbolo) {
+		String imagen="";
+		switch(simbolo) {
+		case 'A': 	imagen=Assets.ARCHER_IMAGE;break;
+		case 'D': 	imagen=Assets.DRAGON_IMAGE;break;
+		case 'P': 	imagen=Assets.PRINCESS_IMAGE;break;
+		case 'V': 	imagen=Assets.VALKYRIE_IMAGE;break;
+		case 'G': 	imagen=Assets.GOBLIN_IMAGE;break;
+		case 'K': 	imagen=Assets.PK_IMAGE;break;
+		}
+		return imagen;
+	}
+	
+	public static int getElixir(char simbolo) {
+		int elixir=0;
+		switch(simbolo) {
+		case 'A': 	elixir=Assets.ARCHER_ELIXIR;break;
+		case 'D': 	elixir=Assets.DRAGON_ELIXIR;break;
+		case 'P': 	elixir=Assets.PRINCESS_ELIXIR;break;
+		case 'V': 	elixir=Assets.VALKYRIE_ELIXIR;break;
+		case 'G': 	elixir=Assets.GOBLIN_ELIXIR;break;
+		case 'K': 	elixir=Assets.PK_ELIXIR;break;
+		}
+		return elixir;
+	}
+	
 	//Método que verifica el vector ,para controlar que cada String tiene 3 posiciones
 	public static boolean checkDeck(String[]deck) {
 		int nStr=0;
 		boolean result=true;
 		while ((nStr<deck.length)&&(result==true)) {
-			if((deck[nStr]!=null)&&(deck[nStr].length()!=3))
+			if((deck[nStr].length()!=0)&&(deck[nStr].length()!=3))
 				result=false;
 			nStr++;
+		}
+		return result;
+	}
+	
+	//Método que comprueba que el char que le entregamos se corresponde con algún personaje
+	public static boolean checkTroop(char troop) {
+		boolean result=false;
+		switch(troop) {
+		case 'A':
+		case 'D':
+		case 'P':
+		case 'V':
+		case 'G':
+		case 'K':
+			result=true;
 		}
 		return result;
 	}
@@ -110,7 +145,6 @@ public class InfortacticsUVa {
 	}
 
 	
-	//FALTA VALIDAR EL VECTOR
 	public static void main(String[] args) {
 		String[] playerDeck = new String[(Assets.BOARD_ROWS/2)*Assets.BOARD_COLUMNS];
 		String[] enemyDeck = new String[(Assets.BOARD_ROWS/2)*Assets.BOARD_COLUMNS];
@@ -134,13 +168,27 @@ public class InfortacticsUVa {
 						Methods.flushScreen();
 						break;
 			case "2":	if(checkDeck(gameDeck)) {
-						invalido=false; 
-						Methods.flushScreen();
-						printBoard(gameDeck);
-						System.out.println();
-						printTroops();
-						System.out.println();
-						printElixir(elixir);
+							invalido=false; 
+							char troop;
+							do {
+								do {
+									Methods.flushScreen();
+									printBoard(gameDeck);
+									System.out.println();
+									printTroops();
+									System.out.println();
+									printElixir(elixir);
+									System.out.println("Personaje a añadir (x para borrar; 0 para guardar)");
+									String add = in.next();
+									troop = add.charAt(0);
+									if(!checkTroop(troop))
+										Methods.flushScreen();
+										System.out.println("Introduzca un Símbolo válido");
+								}while((!checkTroop(troop))&&(troop!=0)&&(troop!='x'));
+								if(elixir<getElixir(troop))
+									Methods.flushScreen();
+									System.out.println("¡No tienes suficiente elixir!");
+							}while(elixir<getElixir(troop));
 						}
 						else {
 							Methods.flushScreen();
