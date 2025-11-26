@@ -17,7 +17,7 @@ public class InfortacticsUVa {
 	}
 	
 	//Método que recibe un vector con la posición de cada personaje e imprime el tablero por pantalla.
-	public static void printBoard(String[]gameDeck) {
+	public static void printBoard(String[]gameDeck) {	
 		int nfil=Assets.BOARD_ROWS; int ncol=Assets.BOARD_COLUMNS;
 		char simbolo;
 		String imagen;
@@ -77,7 +77,7 @@ public class InfortacticsUVa {
 		int nStr=0;
 		boolean result=true;
 		while ((nStr<deck.length)&&(result==true)) {
-			if(deck[nStr].length()!=3)
+			if((deck[nStr]!=null)&&(deck[nStr].length()!=3))
 				result=false;
 			nStr++;
 		}
