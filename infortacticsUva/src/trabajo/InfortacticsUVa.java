@@ -144,12 +144,42 @@ public class InfortacticsUVa {
 	System.out.println("Elixir Restante 🔥: "+elixir);
 	}
 	
-	//Método para introducir una nueva tropa en el vector
-	public static void addTroop(String[]playerDeck,char troop, int row, int column) {
-		for(int cont=0;cont<playerDeck.length;cont++)
-			if((playerDeck[cont].charAt(1)==row))
+	
+	 /**
+	  * Método que comprueba si ya hay alguna tropa en una posición específica
+	  * y si está en los limites de la cuadrícula
+	  * True = posición no ocupada y dentro de cuadrícula
+	  * False = posición ocupada / fuera de cuadrícula
+	  * @param deck
+	  * @param row
+	  * @param column
+	  * @return
+	  */
+	 
+	public static boolean checkPosition(String[]deck, int row, int column) {
+		boolean result=true;
+		for(int cont=0;cont<deck.length;cont++)
+			if((deck[cont].charAt(1)==row+'0')&&(deck[cont].charAt(2)==column+'0'))
+				result=false;
+		if(row>Assets.BOARD_ROWS-1||column>Assets.BOARD_COLUMNS-1)
+			result=false;
+		return result;
 	}
-
+	
+	/**
+	 * Método para introducir una nueva tropa en el vector
+	 * PRE: Comprobar que la posición en la que se introduce la tropa esté vacía
+	 * @param playerDeck
+	 * @param troop
+	 * @param row
+	 * @param column
+	 */
+	public static void addTroop(String[]deck,char troop, int row, int column) {
+		int cont=0;
+		while(deck[cont]!="")
+			cont++;
+		deck[cont]=(""+troop+(row)+(column));
+	}
 	
 	public static void main(String[] args) {
 		String[] playerDeck = new String[(Assets.BOARD_ROWS/2)*Assets.BOARD_COLUMNS];
@@ -175,6 +205,8 @@ public class InfortacticsUVa {
 						break;
 			case "2":	if(checkDeck(gameDeck)) {
 							invalido=false; 
+							int fil;
+							int col;
 							char troop;
 							do {
 								do {
@@ -195,6 +227,13 @@ public class InfortacticsUVa {
 									Methods.flushScreen();
 									System.out.println("¡No tienes suficiente elixir!");
 							}while(elixir<getElixir(troop));
+							do {
+								System.out.println("Introduzca el número de fila en que desea introducir su tropa");
+								fil=in.nextInt();
+								System.out.println("Introduzca el número de columna en que desea introducir su tropa");
+								col=in.nextInt();
+							}while(checkPosition(playerDeck,fil,col));
+							
 						}
 						else {
 							Methods.flushScreen();
