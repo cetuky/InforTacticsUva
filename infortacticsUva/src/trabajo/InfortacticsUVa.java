@@ -143,6 +143,12 @@ public class InfortacticsUVa {
 	public static void printElixir(int elixir) {
 	System.out.println("Elixir Restante 🔥: "+elixir);
 	}
+	
+	//Método para introducir una nueva tropa en el vector
+	public static void addTroop(String[]playerDeck,char troop, int row, int column) {
+		for(int cont=0;cont<playerDeck.length;cont++)
+			if((playerDeck[cont].charAt(1)==row))
+	}
 
 	
 	public static void main(String[] args) {
