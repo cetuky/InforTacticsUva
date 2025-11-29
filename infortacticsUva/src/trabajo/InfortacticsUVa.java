@@ -210,6 +210,23 @@ public class InfortacticsUVa {
 		deck[cont]="";
 	}
 	
+	public static int returnElixir(String[]deck,String pos) {
+		int cont=0;
+		int elixir=0;
+		boolean samepos=false;
+		while((cont<deck.length)&&(!samepos)) {
+			if(deck[cont].length()>0) {
+				if((deck[cont].charAt(1)==pos.charAt(0))&&(deck[cont].charAt(2)==pos.charAt(1)))
+						samepos=true;
+			}
+			if(!samepos)
+			cont++;
+		}
+		if(cont<deck.length)
+		elixir=getElixir(deck[cont].charAt(cont));
+		return elixir;
+	}
+	
 	public static void main(String[] args) {
 		String[] playerDeck = new String[(Assets.BOARD_ROWS/2)*Assets.BOARD_COLUMNS];
 		String[] enemyDeck = new String[(Assets.BOARD_ROWS/2)*Assets.BOARD_COLUMNS];
@@ -225,7 +242,6 @@ public class InfortacticsUVa {
 		
 				
 		while(invalido) {
-			Methods.flushScreen();
 			printMenu();
 			opc = in.next();
 			switch(opc){
@@ -233,6 +249,7 @@ public class InfortacticsUVa {
 						Methods.flushScreen();
 						break;
 			case "2":	char troop=' ';
+						Methods.flushScreen();
 						do {
 							if(checkDeck(gameDeck)) {
 								boolean validtroop, validpos;
@@ -241,7 +258,6 @@ public class InfortacticsUVa {
 								do {
 									//pregunta tropa
 									do {
-										Methods.flushScreen();
 										printBoard(gameDeck);
 										System.out.println();
 										printTroops();
@@ -253,7 +269,7 @@ public class InfortacticsUVa {
 										if((!checkTroop(troop))&&(troop!='0')&&(troop!='x')) {
 											validtroop=false;
 											Methods.flushScreen();
-											System.out.println("Introduzca un Símbolo válido");
+											System.out.println("****Introduzca un Símbolo válido****");
 										}
 										else {
 											validtroop=true;
@@ -284,8 +300,10 @@ public class InfortacticsUVa {
 											validpos=true;
 										}
 									}while(!validpos);
-									if(troop=='x')
+									if(troop=='x') {
+										elixir += returnElixir(playerDeck,pos);
 										removeTroop(playerDeck,pos);
+									}
 									else
 										addTroop(playerDeck,troop,pos);
 										elixir -= troopelixir;
@@ -294,7 +312,7 @@ public class InfortacticsUVa {
 							}
 							else {
 								Methods.flushScreen();
-								System.out.println("Su mazo es inválido");
+								System.out.println("****Su mazo es inválido****");
 							}
 						}while(troop!='0');
 							
@@ -309,7 +327,11 @@ public class InfortacticsUVa {
 						Methods.flushScreen();
 						System.out.println("¡Hasta la próxima!");
 						break;
-			default:	System.out.println("Opción no válida");
+						
+
+			default:	
+						Methods.flushScreen();
+						System.out.println("****Opción no válida****");
 			}
 		}
 		
