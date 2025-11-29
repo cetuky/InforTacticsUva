@@ -210,6 +210,12 @@ public class InfortacticsUVa {
 		deck[cont]="";
 	}
 	
+	/**
+	 * Método que devuelve el elixir de la tropa en la pos. XY del vector
+	 * @param deck
+	 * @param pos
+	 * @return
+	 */
 	public static int returnElixir(String[]deck,String pos) {
 		int cont=0;
 		int elixir=0;
