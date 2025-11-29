@@ -229,7 +229,7 @@ public class InfortacticsUVa {
 			cont++;
 		}
 		if(cont<deck.length)
-		elixir=getElixir(deck[cont].charAt(cont));
+		elixir=getElixir(deck[cont].charAt(0));
 		return elixir;
 	}
 	
@@ -281,12 +281,14 @@ public class InfortacticsUVa {
 											validtroop=true;
 											if((troop!='0')&&(troop!='x'))
 												troopelixir= getElixir(troop);
+											if((troop=='0')||(troop=='x'))
+												troopelixir=0;
 										}
 									}while(!validtroop);
 									
 									if(elixir<troopelixir) {
 										Methods.flushScreen();
-										System.out.println("¡No tienes suficiente elixir!");
+										System.out.println("****¡No tienes suficiente elixir!****");
 									}
 								}while(elixir<troopelixir);
 								
