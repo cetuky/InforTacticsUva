@@ -147,38 +147,67 @@ public class InfortacticsUVa {
 	
 	 /**
 	  * Método que comprueba si ya hay alguna tropa en una posición específica
-	  * y si está en los limites de la cuadrícula
-	  * True = posición no ocupada y dentro de cuadrícula
-	  * False = posición ocupada / fuera de cuadrícula
+	  * False = posición no ocupada
+	  *	True = posición ocupada
 	  * @param deck
-	  * @param row
-	  * @param column
-	  * @return
+	  * @param pos
+	  * @return result
 	  */
 	 
-	public static boolean checkPosition(String[]deck, int row, int column) {
-		boolean result=true;
+	public static boolean occupiedPos(String[]deck, String pos) {
+		boolean result=false;
 		for(int cont=0;cont<deck.length;cont++)
-			if((deck[cont].charAt(1)==row+'0')&&(deck[cont].charAt(2)==column+'0'))
-				result=false;
-		if(row>Assets.BOARD_ROWS-1||column>Assets.BOARD_COLUMNS-1)
-			result=false;
+			if(deck[cont].length()>0) {
+				if((deck[cont].charAt(1)==pos.charAt(0))&&(deck[cont].charAt(2)==pos.charAt(1)))
+					result=true;
+			}
+		return result;
+	}
+	
+	/**
+	 * Método que comprueba si la posición introducida es válida
+	 * true = inválida
+	 * false = válida
+	 */
+	public static boolean invalidPos(String pos) {
+		boolean result=false;
+		if ((pos.length()!=2)||((pos.charAt(0)-'0'<Assets.BOARD_ROWS/2)||(pos.charAt(0)-'0'>=Assets.BOARD_ROWS))||
+				((pos.charAt(1)-'0'<0)||(pos.charAt(1)-'0'>=Assets.BOARD_COLUMNS)))
+		result=true;
 		return result;
 	}
 	
 	/**
 	 * Método para introducir una nueva tropa en el vector
-	 * PRE: Comprobar que la posición en la que se introduce la tropa esté vacía
-	 * @param playerDeck
+	 * @param deck
 	 * @param troop
-	 * @param row
-	 * @param column
+	 * @param pos
 	 */
-	public static void addTroop(String[]deck,char troop, int row, int column) {
+	public static void addTroop(String[]deck,char troop,String pos) {
 		int cont=0;
-		while(deck[cont]!="")
+		while((cont<deck.length)&&(deck[cont].length()>0))
 			cont++;
-		deck[cont]=(""+troop+(row)+(column));
+		deck[cont]=(troop+pos);
+	}
+	
+	/**
+	 * Método para eliminar una tropa del vector
+	 * @param deck
+	 * @param pos
+	 */
+	public static void removeTroop(String[]deck,String pos) {
+		int cont=0;
+		boolean samepos=false;
+		while((cont<deck.length)&&(!samepos)) {
+			if(deck[cont].length()>0) {
+				if((deck[cont].charAt(1)==pos.charAt(0))&&(deck[cont].charAt(2)==pos.charAt(1)))
+						samepos=true;
+			}
+			if(!samepos)
+			cont++;
+		}
+		if(cont<deck.length)
+		deck[cont]="";
 	}
 	
 	public static void main(String[] args) {
@@ -203,43 +232,72 @@ public class InfortacticsUVa {
 			case "1": 	invalido=false;
 						Methods.flushScreen();
 						break;
-			case "2":	if(checkDeck(gameDeck)) {
-							invalido=false; 
-							int fil;
-							int col;
-							char troop;
-							do {
+			case "2":	char troop=' ';
+						do {
+							if(checkDeck(gameDeck)) {
+								boolean validtroop, validpos;
+								String pos;
+								int troopelixir=0;
 								do {
-									Methods.flushScreen();
-									printBoard(gameDeck);
-									System.out.println();
-									printTroops();
-									System.out.println();
-									printElixir(elixir);
-									System.out.println("Personaje a añadir (x para borrar; 0 para guardar)");
-									String add = in.next();
-									troop = add.charAt(0);
-									if(!checkTroop(troop))
+									//pregunta tropa
+									do {
 										Methods.flushScreen();
-										System.out.println("Introduzca un Símbolo válido");
-								}while((!checkTroop(troop))&&(troop!=0)&&(troop!='x'));
-								if(elixir<getElixir(troop))
-									Methods.flushScreen();
-									System.out.println("¡No tienes suficiente elixir!");
-							}while(elixir<getElixir(troop));
-							do {
-								System.out.println("Introduzca el número de fila en que desea introducir su tropa");
-								fil=in.nextInt();
-								System.out.println("Introduzca el número de columna en que desea introducir su tropa");
-								col=in.nextInt();
-							}while(checkPosition(playerDeck,fil,col));
+										printBoard(gameDeck);
+										System.out.println();
+										printTroops();
+										System.out.println();
+										printElixir(elixir);
+										System.out.println("Personaje a añadir (x para borrar; 0 para guardar)");
+										String add = in.next();
+										troop = add.charAt(0);
+										if((!checkTroop(troop))&&(troop!='0')&&(troop!='x')) {
+											validtroop=false;
+											Methods.flushScreen();
+											System.out.println("Introduzca un Símbolo válido");
+										}
+										else {
+											validtroop=true;
+											if((troop!='0')&&(troop!='x'))
+												troopelixir= getElixir(troop);
+										}
+									}while(!validtroop);
+									
+									if(elixir<troopelixir) {
+										Methods.flushScreen();
+										System.out.println("¡No tienes suficiente elixir!");
+									}
+								}while(elixir<troopelixir);
+								
+								
+								//Comprobar que la posición es válida
+								if(troop!='0') {
+									do {
+										System.out.println("Introduzca la posición XY de la tropa que desea introducir/eliminar");
+										pos=in.next();
+										if(invalidPos(pos)) {
+											System.out.println("Posición inválida");
+											validpos=false;
+										}else if((occupiedPos(playerDeck,pos))&&(troop!='x')){
+											System.out.println("Posición ocupada por otra tropa");	
+											validpos=false;
+										}else {
+											validpos=true;
+										}
+									}while(!validpos);
+									if(troop=='x')
+										removeTroop(playerDeck,pos);
+									else
+										addTroop(playerDeck,troop,pos);
+										elixir -= troopelixir;
+								}
+								Methods.createGameDeck(playerDeck, enemyDeck, gameDeck);
+							}
+							else {
+								Methods.flushScreen();
+								System.out.println("Su mazo es inválido");
+							}
+						}while(troop!='0');
 							
-						}
-						else {
-							Methods.flushScreen();
-							System.out.println("Su mazo es inválido");
-						}
-						
 						break;
 			case "3":	invalido=false;
 						Methods.flushScreen();
