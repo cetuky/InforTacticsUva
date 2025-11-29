@@ -309,10 +309,13 @@ public class InfortacticsUVa {
 									if(troop=='x') {
 										elixir += returnElixir(playerDeck,pos);
 										removeTroop(playerDeck,pos);
+										Methods.flushScreen();
 									}
-									else
+									else {
 										addTroop(playerDeck,troop,pos);
 										elixir -= troopelixir;
+										Methods.flushScreen();
+									}
 								}
 								Methods.createGameDeck(playerDeck, enemyDeck, gameDeck);
 							}
@@ -321,7 +324,7 @@ public class InfortacticsUVa {
 								System.out.println("****Su mazo es inválido****");
 							}
 						}while(troop!='0');
-							
+						Methods.flushScreen();							
 						break;
 			case "3":	invalido=false;
 						Methods.flushScreen();
