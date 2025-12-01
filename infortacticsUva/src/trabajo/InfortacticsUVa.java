@@ -24,8 +24,9 @@ public class InfortacticsUVa {
 		
 		//Inicio cabecera
 		System.out.println("TABLERO\n");
+		System.out.print("X\\Y");
 			for(int cont=0;cont<nfil;cont++)
-				System.out.print("    "+cont);
+				System.out.print(" "+cont+"   ");
 			System.out.println();
 		//Fin cabecera
 			

@@ -12,7 +12,7 @@ public class Test {
 //		InfortacticsUVa.printTroops();
 //		InfortacticsUVa.printElixir(6);
 		//Methods.initializeDeck(prueba3);
-		//InfortacticsUVa.printBoard(prueba3);
+		InfortacticsUVa.printBoard(prueba3);
 //		for(int i=0;i<prueba3.length;i++)
 //		System.out.print(prueba3[i].charAt(0));
 //		a = (char)(valor+'0');
@@ -20,7 +20,7 @@ public class Test {
 //		System.out.println(InfortacticsUVa.checkTroop('A'));
 //		InfortacticsUVa.addTroop(prueba3, 'A', "02");
 //		for(int c=0;c<prueba3.length;c++)
-			System.out.print(InfortacticsUVa.invalidPos("31"));
+//			System.out.print(InfortacticsUVa.invalidPos("31"));
 //		System.out.print(InfortacticsUVa.occupiedPos(prueba3,"01"));
 //		System.out.print(0+'1');
 	}
