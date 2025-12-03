@@ -1,4 +1,5 @@
 package trabajo;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -342,7 +343,7 @@ public class InfortacticsUVa {
 							guardar.print(playerDeck[pos]+" ");
 						}
 					}
-					System.out.println("****Su baraja se ha guardado con éxito");
+					System.out.println("****Su baraja se ha guardado con éxito****");
 					guardar.close();
 				}catch(FileNotFoundException e) {
 					System.out.println("****Ha habido un problema al guardar la baraja****");
@@ -350,8 +351,22 @@ public class InfortacticsUVa {
 				
 			break;
 			case "4":	
-				invalido=false;
 				Methods.flushScreen();
+				try {
+					Scanner leer = new Scanner(new File("Barajas/BarajaGuardada.txt"));
+					int pos=0;
+					elixir = Assets.INITIAL_ELIXIR;
+					while(leer.hasNext()) {
+						String nextTroop = leer.next();
+						playerDeck[pos]=nextTroop;
+						pos++;
+						elixir -= getElixir(nextTroop.charAt(0));
+					}
+					System.out.println("****La baraja se ha cargado exitosamente****");
+					Methods.createGameDeck(playerDeck, enemyDeck, gameDeck);
+				}catch(FileNotFoundException e) {
+					System.out.println("****Ha habido un problema al cargar la baraja****");
+				}
 			break;
 			case "5":	
 				invalido=false;
