@@ -6,7 +6,9 @@ import java.util.Scanner;
 
 public class InfortacticsUVa {
 
-	//Método que sirve para imprimir el menú del juego.
+	/**
+	 * Método que sirve para imprimir el menú del juego.
+	 */
 	public static void printMenu() {
 		System.out.println("  🏰 InforTactics UVa 🏰");
 		System.out.println("·------------------------·");
@@ -19,7 +21,10 @@ public class InfortacticsUVa {
 		System.out.print("Opción: ");
 	}
 
-	//Método que recibe un vector con la posición de cada personaje e imprime el tablero por pantalla.
+	/**
+	 * //Método que recibe un vector con la posición de cada personaje e imprime el tablero por pantalla.
+	 * @param gameDeck
+	 */
 	public static void printBoard(String[]gameDeck) {	
 		int nfil=Assets.BOARD_ROWS; int ncol=Assets.BOARD_COLUMNS;
 		char simbolo;
@@ -70,6 +75,11 @@ public class InfortacticsUVa {
 		System.out.println();
 	}
 
+	/**
+	 * Método que dado el símbolo de un personaje, devuelve su imagen
+	 * @param simbolo
+	 * @return
+	 */
 	public static String getImage(char simbolo) {
 		String imagen="";
 		switch(simbolo) {
@@ -83,6 +93,11 @@ public class InfortacticsUVa {
 		return imagen;
 	}
 
+	/**
+	 * Método que dado el símbolo de un personaje, devuelve su coste de elixir
+	 * @param simbolo
+	 * @return
+	 */
 	public static int getElixir(char simbolo) {
 		int elixir=0;
 		switch(simbolo) {
@@ -96,7 +111,11 @@ public class InfortacticsUVa {
 		return elixir;
 	}
 
-	//Método que verifica el vector ,para controlar que cada String tiene 3 posiciones
+	/**
+	 * Método que verifica el vector ,para controlar que cada String tiene 3 posiciones
+	 * @param deck
+	 * @return
+	 */
 	public static boolean checkDeck(String[]deck) {
 		int nStr=0;
 		boolean result=true;
@@ -108,7 +127,11 @@ public class InfortacticsUVa {
 		return result;
 	}
 
-	//Método que comprueba que el char que le entregamos se corresponde con algún personaje
+	/**
+	 * Método que comprueba que el char que le entregamos se corresponde con algún personaje
+	 * @param troop
+	 * @return
+	 */
 	public static boolean checkTroop(char troop) {
 		boolean result=false;
 		switch(troop) {
@@ -124,7 +147,9 @@ public class InfortacticsUVa {
 	}
 
 
-	//Método que muestra los personajes seleccionables
+	/**
+	 * Método que muestra los personajes seleccionables
+	 */
 	public static void printTroops() {
 		System.out.println("Personaje      Símb.  Elixir  %Ataque  %Defensa");
 		System.out.println("-----------------------------------------------");
@@ -143,7 +168,10 @@ public class InfortacticsUVa {
 		System.out.println("-----------------------------------------------");
 	}
 
-	//Método que imprime en pantalla el elixir restante
+	/**
+	 * Método que imprime en pantalla el elixir restante
+	 * @param elixir
+	 */
 	public static void printElixir(int elixir) {
 		System.out.println("Elixir Restante 🔥: "+elixir);
 	}
@@ -256,8 +284,34 @@ public class InfortacticsUVa {
 			opc = in.next();
 			switch(opc){
 			case "1": 	
-				invalido=false;
 				Methods.flushScreen();
+				if(checkDeck(playerDeck)) {
+					int barajas = 0;
+					int nbaraja=0;
+					try {
+						//Abro un Scanner para contar cuántas barajas tiene el fichero BarajasEnemigas.txt
+						Scanner count = new Scanner(new File("Barajas/BarajasEnemigas.txt"));
+						while(count.hasNextLine()) {
+							barajas++;
+							count.nextLine();
+						}
+						count.close();
+						
+						String selectedDeck;
+						//Abro otro Scanner para elegir una baraja aleatoria del fichero BarajasEnemigas.txt
+						Scanner read = new Scanner(new File("Barajas/BarajasEnemigas.txt"));
+						nbaraja = (int)(Math.random()*barajas);
+						for(int fila=0;fila<nbaraja;fila++)
+							read.nextLine();
+						selectedDeck = read.nextLine();
+						int pos;
+						while()
+					} catch	(FileNotFoundException e){
+						System.out.println("****Ha habido un error al cargar la baraja enemiga****");
+					}
+				}
+				else
+					System.out.println("Tienes que configurar tu baraja antes");
 			break;
 			case "2":	
 				char troop=' ';
