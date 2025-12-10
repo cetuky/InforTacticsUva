@@ -92,6 +92,24 @@ public class InfortacticsUVa {
 		}
 		return imagen;
 	}
+	
+	/**
+	 * Método que dado el símbolo de un personaje, devuelve su nombre
+	 * @param simbolo
+	 * @return
+	 */
+	public static String getName(char simbolo) {
+		String name="";
+		switch(simbolo) {
+		case 'A': 	name=Assets.ARCHER_NAME;break;
+		case 'D': 	name=Assets.DRAGON_NAME;break;
+		case 'P': 	name=Assets.PRINCESS_NAME;break;
+		case 'V': 	name=Assets.VALKYRIE_NAME;break;
+		case 'G': 	name=Assets.GOBLIN_NAME;break;
+		case 'K': 	name=Assets.PK_NAME;break;
+		}
+		return name;
+	}
 
 	/**
 	 * Método que dado el símbolo de un personaje, devuelve su coste de elixir
@@ -241,6 +259,18 @@ public class InfortacticsUVa {
 		if(cont<deck.length)
 			deck[cont]="";
 	}
+	
+	public static void showDeck(String[]deck) {
+		String image, name;
+		int posx,posy;
+		for(int pos=0;pos<deck.length;pos++) {
+			image=getImage(deck[pos].charAt(0));
+			name=getName(deck[pos].charAt(0));
+			posx=deck[pos].charAt(1)+'0';
+			posy=deck[pos].charAt(2)+'0';
+			System.out.println(image+" "+name+" en la posición ["+posx+","+posy+"]");
+		}
+	}
 
 	/**
 	 * Método que devuelve el elixir de la tropa en la pos. XY del vector
@@ -304,11 +334,16 @@ public class InfortacticsUVa {
 						for(int fila=0;fila<nbaraja;fila++)
 							read.nextLine();
 						selectedDeck = read.nextLine();
-						int pos;
-						while()
+						for(int pos=0;pos<selectedDeck.length();pos+=3)
+							enemyDeck[pos/3]=""+selectedDeck.charAt(pos)+selectedDeck.charAt(pos+1)+
+							selectedDeck.charAt(pos);
+						read.close();
+						System.out.println("El enemigo juega con:");
+						showDeck(enemyDeck);
+						Methods.startGame(in, playerDeck, enemyDeck);
 					} catch	(FileNotFoundException e){
 						System.out.println("****Ha habido un error al cargar la baraja enemiga****");
-					}
+					} 
 				}
 				else
 					System.out.println("Tienes que configurar tu baraja antes");
@@ -416,6 +451,7 @@ public class InfortacticsUVa {
 						pos++;
 						elixir -= getElixir(nextTroop.charAt(0));
 					}
+					leer.close();
 					System.out.println("****La baraja se ha cargado exitosamente****");
 					Methods.createGameDeck(playerDeck, enemyDeck, gameDeck);
 				}catch(FileNotFoundException e) {
