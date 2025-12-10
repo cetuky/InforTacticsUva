@@ -92,7 +92,7 @@ public class InfortacticsUVa {
 		}
 		return imagen;
 	}
-	
+
 	/**
 	 * Método que dado el símbolo de un personaje, devuelve su nombre
 	 * @param simbolo
@@ -144,7 +144,7 @@ public class InfortacticsUVa {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Método que comprueba si una baraja está vacía
 	 * PRE: baraja con formato válido
@@ -276,7 +276,7 @@ public class InfortacticsUVa {
 		if(cont<deck.length)
 			deck[cont]="";
 	}
-	
+
 	public static void showDeck(String[]deck) {
 		String image, name;
 		int posx,posy;
@@ -345,7 +345,7 @@ public class InfortacticsUVa {
 							count.nextLine();
 						}
 						count.close();
-						
+
 						String selectedDeck;
 						//Abro otro Scanner para elegir una baraja aleatoria del fichero BarajasEnemigas.txt
 						Scanner read = new Scanner(new File("Barajas/BarajasEnemigas.txt"));
@@ -368,82 +368,84 @@ public class InfortacticsUVa {
 				}
 				else
 					System.out.println("****Tienes que configurar tu baraja antes****");
-			break;
+				break;
 			case "2":	
 				char troop=' ';
 				Methods.flushScreen();
 				do {
-					if(checkDeck(gameDeck)) {
-						boolean validtroop, validpos;
-						String pos;
-						int troopelixir=0;
+					if(!checkDeck(playerDeck)) {
+						Methods.flushScreen();
+						System.out.println("****Su mazo guardado es inválido****");
+						System.out.println("****Cree un nuevo mazo válido****");
+						Methods.initializeDeck(playerDeck);
+						elixir = Assets.INITIAL_ELIXIR;
+					}
+					boolean validtroop, validpos;
+					String pos;
+					int troopelixir=0;
+					do {
+						//pregunta tropa
 						do {
-							//pregunta tropa
-							do {
-								printBoard(gameDeck);
-								System.out.println();
-								printTroops();
-								System.out.println();
-								printElixir(elixir);
-								System.out.println("Personaje a añadir (x para borrar; 0 para guardar)");
-								String add = in.next();
-								troop = add.charAt(0);
-								if((!checkTroop(troop))&&(troop!='0')&&(troop!='x')) {
-									validtroop=false;
-									Methods.flushScreen();
-									System.out.println("****Introduzca un Símbolo válido****");
-								}
-								else {
-									validtroop=true;
-									if((troop!='0')&&(troop!='x'))
-										troopelixir= getElixir(troop);
-									if((troop=='0')||(troop=='x'))
-										troopelixir=0;
-								}
-							}while(!validtroop);
-	
-							if(elixir<troopelixir) {
+							Methods.createGameDeck(playerDeck, enemyDeck, gameDeck);
+							printBoard(gameDeck);
+							System.out.println();
+							printTroops();
+							System.out.println();
+							printElixir(elixir);
+							System.out.println("Personaje a añadir (x para borrar; 0 para guardar)");
+							String add = in.next();
+							troop = add.charAt(0);
+							if((!checkTroop(troop))&&(troop!='0')&&(troop!='x')) {
+								validtroop=false;
 								Methods.flushScreen();
-								System.out.println("****¡No tienes suficiente elixir!****");
-							}
-						}while(elixir<troopelixir);
-	
-	
-						//Comprobar que la posición es válida
-						if(troop!='0') {
-							do {
-								System.out.println("Introduzca la posición XY de la tropa que desea introducir/eliminar");
-								pos=in.next();
-								if(invalidPos(pos)) {
-									System.out.println("Posición inválida");
-									validpos=false;
-								}else if((occupiedPos(playerDeck,pos))&&(troop!='x')){
-									System.out.println("Posición ocupada por otra tropa");	
-									validpos=false;
-								}else {
-									validpos=true;
-								}
-							}while(!validpos);
-							if(troop=='x') {
-								elixir += returnElixir(playerDeck,pos);
-								removeTroop(playerDeck,pos);
-								Methods.flushScreen();
+								System.out.println("****Introduzca un Símbolo válido****");
 							}
 							else {
-								addTroop(playerDeck,troop,pos);
-								elixir -= troopelixir;
-								Methods.flushScreen();
+								validtroop=true;
+								if((troop!='0')&&(troop!='x'))
+									troopelixir= getElixir(troop);
+								if((troop=='0')||(troop=='x'))
+									troopelixir=0;
 							}
+						}while(!validtroop);
+
+						if(elixir<troopelixir) {
+							Methods.flushScreen();
+							System.out.println("****¡No tienes suficiente elixir!****");
 						}
-						Methods.createGameDeck(playerDeck, enemyDeck, gameDeck);
+					}while(elixir<troopelixir);
+
+
+					//Comprobar que la posición es válida
+					if(troop!='0') {
+						do {
+							System.out.println("Introduzca la posición XY de la tropa que desea introducir/eliminar");
+							pos=in.next();
+							if(invalidPos(pos)) {
+								System.out.println("Posición inválida");
+								validpos=false;
+							}else if((occupiedPos(playerDeck,pos))&&(troop!='x')){
+								System.out.println("Posición ocupada por otra tropa");	
+								validpos=false;
+							}else {
+								validpos=true;
+							}
+						}while(!validpos);
+						if(troop=='x') {
+							elixir += returnElixir(playerDeck,pos);
+							removeTroop(playerDeck,pos);
+							Methods.flushScreen();
+						}
+						else {
+							addTroop(playerDeck,troop,pos);
+							elixir -= troopelixir;
+							Methods.flushScreen();
+						}
 					}
-					else {
-						Methods.flushScreen();
-						System.out.println("****Su mazo es inválido****");
-					}
+					Methods.createGameDeck(playerDeck, enemyDeck, gameDeck);
 				}while(troop!='0');
 				Methods.flushScreen();							
-			break;
+				break;
 			case "3":	
 				Methods.flushScreen();
 				try {
@@ -458,8 +460,8 @@ public class InfortacticsUVa {
 				}catch(FileNotFoundException e) {
 					System.out.println("****Ha habido un problema al guardar la baraja****");
 				}
-				
-			break;
+
+				break;
 			case "4":	
 				Methods.flushScreen();
 				try {
@@ -478,12 +480,12 @@ public class InfortacticsUVa {
 				}catch(FileNotFoundException e) {
 					System.out.println("****Ha habido un problema al cargar la baraja****");
 				}
-			break;
+				break;
 			case "5":	
 				invalido=false;
 				Methods.flushScreen();
 				System.out.println("¡Hasta la próxima!");
-			break;
+				break;
 
 
 			default:	
