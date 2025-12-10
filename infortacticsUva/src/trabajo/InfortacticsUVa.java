@@ -130,7 +130,7 @@ public class InfortacticsUVa {
 	}
 
 	/**
-	 * Método que verifica el vector ,para controlar que cada String tiene 3 posiciones
+	 * Método que verifica el vector,para controlar que cada String tiene 3 posiciones
 	 * @param deck
 	 * @return
 	 */
@@ -139,6 +139,23 @@ public class InfortacticsUVa {
 		boolean result=true;
 		while ((nStr<deck.length)&&(result==true)) {
 			if((deck[nStr].length()!=0)&&(deck[nStr].length()!=3))
+				result=false;
+			nStr++;
+		}
+		return result;
+	}
+	
+	/**
+	 * Método que comprueba si una baraja está vacía
+	 * PRE: baraja con formato válido
+	 * @param deck
+	 * @return
+	 */
+	public static boolean emptyDeck(String[]deck) {
+		int nStr=0;
+		boolean result=true;
+		while ((nStr<deck.length)&&(result==true)) {
+			if(deck[nStr].length()==0)
 				result=false;
 			nStr++;
 		}
@@ -264,11 +281,13 @@ public class InfortacticsUVa {
 		String image, name;
 		int posx,posy;
 		for(int pos=0;pos<deck.length;pos++) {
-			image=getImage(deck[pos].charAt(0));
-			name=getName(deck[pos].charAt(0));
-			posx=deck[pos].charAt(1)+'0';
-			posy=deck[pos].charAt(2)+'0';
-			System.out.println(image+" "+name+" en la posición ["+posx+","+posy+"]");
+			if(deck[pos]!="") {
+				image=getImage(deck[pos].charAt(0));
+				name=getName(deck[pos].charAt(0));
+				posx=deck[pos].charAt(1)-'0';
+				posy=deck[pos].charAt(2)-'0';
+				System.out.println(image+" "+name+" en la posición ["+posx+","+posy+"]");
+			}
 		}
 	}
 
@@ -315,7 +334,7 @@ public class InfortacticsUVa {
 			switch(opc){
 			case "1": 	
 				Methods.flushScreen();
-				if(checkDeck(playerDeck)) {
+				if(emptyDeck(playerDeck)) {
 					int barajas = 0;
 					int nbaraja=0;
 					try {
@@ -334,9 +353,11 @@ public class InfortacticsUVa {
 						for(int fila=0;fila<nbaraja;fila++)
 							read.nextLine();
 						selectedDeck = read.nextLine();
-						for(int pos=0;pos<selectedDeck.length();pos+=3)
-							enemyDeck[pos/3]=""+selectedDeck.charAt(pos)+selectedDeck.charAt(pos+1)+
-							selectedDeck.charAt(pos);
+						//La baraja enemiga está copiada en selectedDeck
+						//Copiamos la baraja enemiga en el vector
+						for(int pos=0;pos<selectedDeck.length()/4;pos++)
+							enemyDeck[pos]=""+selectedDeck.charAt(pos*4)+selectedDeck.charAt((pos*4)+1)+
+							selectedDeck.charAt((pos*4)+2);
 						read.close();
 						System.out.println("El enemigo juega con:");
 						showDeck(enemyDeck);
@@ -346,7 +367,7 @@ public class InfortacticsUVa {
 					} 
 				}
 				else
-					System.out.println("Tienes que configurar tu baraja antes");
+					System.out.println("****Tienes que configurar tu baraja antes****");
 			break;
 			case "2":	
 				char troop=' ';
