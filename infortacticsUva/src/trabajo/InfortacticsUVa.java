@@ -154,8 +154,8 @@ public class InfortacticsUVa {
 	public static boolean emptyDeck(String[]deck) {
 		int nStr=0;
 		boolean result=true;
-		while ((nStr<deck.length)&&(result==true)) {
-			if(deck[nStr].length()==0)
+		while ((nStr<deck.length)) {
+			if(deck[nStr].length()!=0)
 				result=false;
 			nStr++;
 		}
@@ -334,7 +334,7 @@ public class InfortacticsUVa {
 			switch(opc){
 			case "1": 	
 				Methods.flushScreen();
-				if(emptyDeck(playerDeck)) {
+				if(!emptyDeck(playerDeck)) {
 					int barajas = 0;
 					int nbaraja=0;
 					try {
