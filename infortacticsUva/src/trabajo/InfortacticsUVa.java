@@ -144,6 +144,23 @@ public class InfortacticsUVa {
 		}
 		return result;
 	}
+	
+	/**
+	 * Método sobrecargado, para permitir comprobar un vector copiado en un String
+	 * @param troop
+	 * @return
+	 */
+	public static boolean checkDeck(String troop) {
+		boolean error = false;
+		if(troop.length()==3) {
+			if(checkTroop(troop.charAt(0))) {
+				String pos = ""+troop.charAt(1)+troop.charAt(2);
+				if(outBoard(pos))
+					error=true;
+			}else error=true;
+		} else if(!(troop.length()==1)||!(troop.charAt(0)==' '))error=true;
+		return !error;
+	}
 
 	/**
 	 * Método que comprueba si una baraja está vacía
@@ -228,6 +245,19 @@ public class InfortacticsUVa {
 				if((deck[cont].charAt(1)==pos.charAt(0))&&(deck[cont].charAt(2)==pos.charAt(1)))
 					result=true;
 			}
+		return result;
+	}
+	
+	/**
+	 * Método que comprueba si la posición introducida está en los límites del tablero
+	 * @param pos
+	 * @return
+	 */
+	public static boolean outBoard(String pos) {
+		boolean result=false;
+		if ((pos.length()!=2)||((pos.charAt(0)-'0'<Assets.BOARD_ROWS)||(pos.charAt(0)-'0'>=Assets.BOARD_ROWS))||
+				((pos.charAt(1)-'0'<0)||(pos.charAt(1)-'0'>=Assets.BOARD_COLUMNS)))
+			result=true;
 		return result;
 	}
 
@@ -466,17 +496,28 @@ public class InfortacticsUVa {
 				Methods.flushScreen();
 				try {
 					Scanner leer = new Scanner(new File("Barajas/BarajaGuardada.txt"));
+					Methods.initializeDeck(playerDeck);
 					int pos=0;
 					elixir = Assets.INITIAL_ELIXIR;
-					while(leer.hasNext()) {
+					boolean valid = true;
+					while((leer.hasNext())&&(valid)) {
 						String nextTroop = leer.next();
+						if(checkDeck(nextTroop))
+							valid = false;
 						playerDeck[pos]=nextTroop;
 						pos++;
 						elixir -= getElixir(nextTroop.charAt(0));
 					}
 					leer.close();
-					System.out.println("****La baraja se ha cargado exitosamente****");
-					Methods.createGameDeck(playerDeck, enemyDeck, gameDeck);
+					if(!valid) {
+						System.out.println("****La baraja guardada está corrompida****");
+						Methods.initializeDeck(playerDeck);
+						elixir = Assets.INITIAL_ELIXIR;
+					}
+					else {
+						System.out.println("****La baraja se ha cargado exitosamente****");
+						Methods.createGameDeck(playerDeck, enemyDeck, gameDeck);
+					}
 				}catch(FileNotFoundException e) {
 					System.out.println("****Ha habido un problema al cargar la baraja****");
 				}
