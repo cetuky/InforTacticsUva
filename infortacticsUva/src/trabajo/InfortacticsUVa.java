@@ -402,7 +402,7 @@ public class InfortacticsUVa {
 						Scanner check = new Scanner(selectedDeck);
 						boolean valid = true;
 						int pos = 0;
-						while((check.hasNext())&&(valid)) {
+						while((check.hasNext())&&(valid)&&(pos < playerDeck.length)) {
 							String nextTroop = check.next();
 							String position = ""+nextTroop.charAt(1)+nextTroop.charAt(2);
 							if(!invalidEnemyPos(position)){
@@ -532,7 +532,7 @@ public class InfortacticsUVa {
 					elixir = Assets.INITIAL_ELIXIR;
 					boolean valid = true;
 					//Copia los valores mientras el formato de la baraja sea correcto
-					while((leer.hasNext())&&(valid)) {
+					while((leer.hasNext())&&(valid)&&(pos < playerDeck.length)) {
 						String nextTroop = leer.next();
 						String position = ""+nextTroop.charAt(1)+nextTroop.charAt(2);
 						if(!invalidPos(position)){
