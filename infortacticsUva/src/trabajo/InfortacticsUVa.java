@@ -158,7 +158,7 @@ public class InfortacticsUVa {
 				if(outBoard(pos))
 					error=true;
 			}else error=true;
-		} else if(!(troop.length()==1)||!(troop.charAt(0)==' '))error=true;
+		} else error=true;
 		return !error;
 	}
 
@@ -255,7 +255,7 @@ public class InfortacticsUVa {
 	 */
 	public static boolean outBoard(String pos) {
 		boolean result=false;
-		if ((pos.length()!=2)||((pos.charAt(0)-'0'<Assets.BOARD_ROWS)||(pos.charAt(0)-'0'>=Assets.BOARD_ROWS))||
+		if ((pos.length()!=2)||((pos.charAt(0)-'0'>=Assets.BOARD_ROWS)||(pos.charAt(0)-'0'<0))||
 				((pos.charAt(1)-'0'<0)||(pos.charAt(1)-'0'>=Assets.BOARD_COLUMNS)))
 			result=true;
 		return result;
@@ -269,6 +269,19 @@ public class InfortacticsUVa {
 	public static boolean invalidPos(String pos) {
 		boolean result=false;
 		if ((pos.length()!=2)||((pos.charAt(0)-'0'<Assets.BOARD_ROWS/2)||(pos.charAt(0)-'0'>=Assets.BOARD_ROWS))||
+				((pos.charAt(1)-'0'<0)||(pos.charAt(1)-'0'>=Assets.BOARD_COLUMNS)))
+			result=true;
+		return result;
+	}
+	
+	/**
+	 * Método que comprueba si la posición introducida es válida para la baraja enemiga
+	 * true = inválida
+	 * false = válida
+	 */
+	public static boolean invalidEnemyPos(String pos) {
+		boolean result=false;
+		if ((pos.length()!=2)||((pos.charAt(0)-'0'>Assets.BOARD_ROWS/2)||(pos.charAt(0)-'0'<0))||
 				((pos.charAt(1)-'0'<0)||(pos.charAt(1)-'0'>=Assets.BOARD_COLUMNS)))
 			result=true;
 		return result;
@@ -383,12 +396,29 @@ public class InfortacticsUVa {
 						for(int fila=0;fila<nbaraja;fila++)
 							read.nextLine();
 						selectedDeck = read.nextLine();
+						read.close();
 						//La baraja enemiga está copiada en selectedDeck
 						//Copiamos la baraja enemiga en el vector y comprobamos que la baraja sea válida
-						for(int pos=0;pos<selectedDeck.length()/4;pos++)
-							enemyDeck[pos]=""+selectedDeck.charAt(pos*4)+selectedDeck.charAt((pos*4)+1)+
-							selectedDeck.charAt((pos*4)+2);
-						read.close();
+						Scanner check = new Scanner(selectedDeck);
+						boolean valid = true;
+						int pos = 0;
+						while((check.hasNext())&&(valid)) {
+							String nextTroop = check.next();
+							String position = ""+nextTroop.charAt(1)+nextTroop.charAt(2);
+							if(!invalidEnemyPos(position)){
+								if(!occupiedPos(enemyDeck, position)) {
+									if(!checkDeck(nextTroop))
+										valid = false;
+								}
+								else
+									valid = false;
+							}
+							else
+								valid = false;
+							enemyDeck[pos]=nextTroop;
+							pos++;
+						}
+						check.close();
 						System.out.println("El enemigo juega con:");
 						showDeck(enemyDeck);
 						Methods.startGame(in, playerDeck, enemyDeck);
@@ -495,15 +525,22 @@ public class InfortacticsUVa {
 			case "4":	
 				Methods.flushScreen();
 				try {
+					//Lee el fichero e inicializa mazo y elixir
 					Scanner leer = new Scanner(new File("Barajas/BarajaGuardada.txt"));
 					Methods.initializeDeck(playerDeck);
 					int pos=0;
 					elixir = Assets.INITIAL_ELIXIR;
 					boolean valid = true;
+					//Copia los valores mientras el formato de la baraja sea correcto
 					while((leer.hasNext())&&(valid)) {
 						String nextTroop = leer.next();
-						if(!invalidPos(""+nextTroop.charAt(1)+nextTroop.charAt(2))){
-							if(checkDeck(nextTroop))
+						String position = ""+nextTroop.charAt(1)+nextTroop.charAt(2);
+						if(!invalidPos(position)){
+							if(!occupiedPos(playerDeck,position)) {
+								if(!checkDeck(nextTroop))
+									valid = false;
+							}
+							else
 								valid = false;
 						}
 						else
@@ -513,6 +550,7 @@ public class InfortacticsUVa {
 						elixir -= getElixir(nextTroop.charAt(0));
 					}
 					leer.close();
+					//Si el formato no es correcto resetea el mazo y el elixir
 					if(!valid) {
 						System.out.println("****La baraja guardada está corrompida****");
 						Methods.initializeDeck(playerDeck);
