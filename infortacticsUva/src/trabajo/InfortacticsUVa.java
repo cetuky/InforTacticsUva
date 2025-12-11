@@ -384,7 +384,7 @@ public class InfortacticsUVa {
 							read.nextLine();
 						selectedDeck = read.nextLine();
 						//La baraja enemiga está copiada en selectedDeck
-						//Copiamos la baraja enemiga en el vector
+						//Copiamos la baraja enemiga en el vector y comprobamos que la baraja sea válida
 						for(int pos=0;pos<selectedDeck.length()/4;pos++)
 							enemyDeck[pos]=""+selectedDeck.charAt(pos*4)+selectedDeck.charAt((pos*4)+1)+
 							selectedDeck.charAt((pos*4)+2);
@@ -502,7 +502,11 @@ public class InfortacticsUVa {
 					boolean valid = true;
 					while((leer.hasNext())&&(valid)) {
 						String nextTroop = leer.next();
-						if(checkDeck(nextTroop))
+						if(!invalidPos(""+nextTroop.charAt(1)+nextTroop.charAt(2))){
+							if(checkDeck(nextTroop))
+								valid = false;
+						}
+						else
 							valid = false;
 						playerDeck[pos]=nextTroop;
 						pos++;
