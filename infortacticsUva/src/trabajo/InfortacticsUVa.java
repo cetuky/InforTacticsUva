@@ -6,6 +6,11 @@ import java.util.Scanner;
 
 public class InfortacticsUVa {
 
+	// Códigos de color ANSI para la consola
+	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_BLUE = "\u001B[34m"; // Azul para Aliados
+	public static final String ANSI_RED = "\u001B[31m";  // Rojo para Enemigos
+
 	/**
 	 * Método que sirve para imprimir el menú del juego.
 	 */
@@ -43,7 +48,12 @@ public class InfortacticsUVa {
 			System.out.print("  ");
 			//Linea separadora de cada fila
 			for(int cont=0;cont<nfil;cont++)
-				System.out.print(" ————");	
+				if (fil<nfil/2)
+					System.out.print(ANSI_RED+" ————"+ANSI_RESET);
+				else if(fil==nfil/2)
+					System.out.print(" ————");
+				else
+					System.out.print(ANSI_BLUE+" ————"+ANSI_RESET);
 			System.out.println();
 			System.out.print(fil);
 			//Recorre cada posición de cada fila
@@ -65,13 +75,19 @@ public class InfortacticsUVa {
 						}
 					}
 				}
-				System.out.print(" | "+imagen);
+				if(fil<nfil/2)
+					System.out.print(ANSI_RED+" | "+imagen+ANSI_RESET);
+				else
+					System.out.print(ANSI_BLUE+" | "+imagen+ANSI_RESET);
 			}
-			System.out.println(" |");
+			if(fil<nfil/2)
+				System.out.println(ANSI_RED+" |"+ANSI_RESET);
+			else
+				System.out.println(ANSI_BLUE+" |"+ANSI_RESET);
 		}
 		System.out.print("  ");
 		for(int cont=0;cont<nfil;cont++)
-			System.out.print(" ————");
+			System.out.print(ANSI_BLUE+" ————"+ANSI_RESET);
 		System.out.println();
 	}
 
@@ -144,7 +160,7 @@ public class InfortacticsUVa {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Método sobrecargado, para permitir comprobar un vector copiado en un String
 	 * @param troop
@@ -247,7 +263,7 @@ public class InfortacticsUVa {
 			}
 		return result;
 	}
-	
+
 	/**
 	 * Método que comprueba si la posición introducida está en los límites del tablero
 	 * @param pos
@@ -273,7 +289,7 @@ public class InfortacticsUVa {
 			result=true;
 		return result;
 	}
-	
+
 	/**
 	 * Método que comprueba si la posición introducida es válida para la baraja enemiga
 	 * true = inválida
