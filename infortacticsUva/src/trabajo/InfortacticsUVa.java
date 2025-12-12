@@ -418,7 +418,7 @@ public class InfortacticsUVa {
 						Scanner check = new Scanner(selectedDeck);
 						boolean valid = true;
 						int pos = 0;
-						while((check.hasNext())&&(valid)&&(pos < playerDeck.length)) {
+						while((check.hasNext())&&(valid)&&(pos < enemyDeck.length)) {
 							String nextTroop = check.next();
 							String position = ""+nextTroop.charAt(1)+nextTroop.charAt(2);
 							if(!invalidEnemyPos(position)){
