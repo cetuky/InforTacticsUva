@@ -60,7 +60,7 @@ public class InfortacticsUVa {
 			for(int col=0;col<ncol;col++) {
 				//Inicializa imagen en vacío
 				if (fil<nfil/2)
-					imagen=""+Assets.NO_POSITION+Assets.NO_POSITION;
+					imagen=ANSI_RED+Assets.NO_POSITION+Assets.NO_POSITION+ANSI_RESET;
 				else
 					imagen="  ";
 				//Busca en todo el vector
