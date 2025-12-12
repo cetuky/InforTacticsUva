@@ -76,9 +76,9 @@ public class InfortacticsUVa {
 					}
 				}
 				if(fil<nfil/2)
-					System.out.print(ANSI_RED+" | "+imagen+ANSI_RESET);
+					System.out.print(ANSI_RED+" | "+ANSI_RESET+imagen);
 				else
-					System.out.print(ANSI_BLUE+" | "+imagen+ANSI_RESET);
+					System.out.print(ANSI_BLUE+" | "+ANSI_RESET+imagen);
 			}
 			if(fil<nfil/2)
 				System.out.println(ANSI_RED+" |"+ANSI_RESET);
