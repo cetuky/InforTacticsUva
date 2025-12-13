@@ -71,7 +71,12 @@ public class InfortacticsUVa {
 
 						if((filCarta==fil)&&(colCarta==col)) {
 							simbolo = gameDeck[i].charAt(0);
-							imagen = getImage(simbolo);		
+							//Cojo la imagen sin color
+							String white = getImage(simbolo);		
+							if(i%2==0)
+								imagen = ANSI_BLUE+white+ANSI_RESET;
+							else
+								imagen = ANSI_RED+white+ANSI_RESET;
 						}
 					}
 				}
@@ -420,10 +425,14 @@ public class InfortacticsUVa {
 						int pos = 0;
 						while((check.hasNext())&&(valid)&&(pos < enemyDeck.length)) {
 							String nextTroop = check.next();
-							String position = ""+nextTroop.charAt(1)+nextTroop.charAt(2);
-							if(!invalidEnemyPos(position)){
-								if(!occupiedPos(enemyDeck, position)) {
-									if(!checkDeck(nextTroop))
+							if (nextTroop.length()==3) {
+								String position = ""+nextTroop.charAt(1)+nextTroop.charAt(2);
+								if(!invalidEnemyPos(position)){
+									if(!occupiedPos(enemyDeck, position)) {
+										if(!checkDeck(nextTroop))
+											valid = false;
+									}
+									else
 										valid = false;
 								}
 								else
@@ -550,16 +559,19 @@ public class InfortacticsUVa {
 					//Copia los valores mientras el formato de la baraja sea correcto
 					while((leer.hasNext())&&(valid)&&(pos < playerDeck.length)) {
 						String nextTroop = leer.next();
-						String position = ""+nextTroop.charAt(1)+nextTroop.charAt(2);
-						if(!invalidPos(position)){
-							if(!occupiedPos(playerDeck,position)) {
-								if(!checkDeck(nextTroop))
+						if(nextTroop.length()==3) {
+							String position = ""+nextTroop.charAt(1)+nextTroop.charAt(2);
+							if(!invalidPos(position)){
+								if(!occupiedPos(playerDeck,position)) {
+									if(!checkDeck(nextTroop))
+										valid = false;
+								}
+								else
 									valid = false;
 							}
 							else
 								valid = false;
-						}
-						else
+						}else 
 							valid = false;
 						playerDeck[pos]=nextTroop;
 						pos++;
