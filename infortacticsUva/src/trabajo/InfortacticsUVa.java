@@ -72,7 +72,9 @@ public class InfortacticsUVa {
 						if((filCarta==fil)&&(colCarta==col)) {
 							simbolo = gameDeck[i].charAt(0);
 							//Cojo la imagen sin color
-							String white = getImage(simbolo);		
+							String white = getImage(simbolo);	
+							//Las posiciones pares de gameDeck son del jugador, 
+							//y las impares del enemigo
 							if(i%2==0)
 								imagen = ANSI_BLUE+white+ANSI_RESET;
 							else
@@ -431,6 +433,7 @@ public class InfortacticsUVa {
 						int pos = 0;
 						while((check.hasNext())&&(valid)&&(pos < enemyDeck.length)) {
 							String nextTroop = check.next();
+							//Comprobamos que la cadena tenga 3 caracteres para evitar crashes
 							if (nextTroop.length()==3) {
 								String position = ""+nextTroop.charAt(1)+nextTroop.charAt(2);
 								if(!invalidEnemyPos(position)){
@@ -450,9 +453,16 @@ public class InfortacticsUVa {
 							pos++;
 						}
 						check.close();
-						System.out.println("El enemigo juega con:");
-						showDeck(enemyDeck);
-						Methods.startGame(in, playerDeck, enemyDeck);
+						//Si la baraja elegida contiene algún error resetea el mazo enemigo y salta un error
+						if(!valid) {
+							System.out.println("****La baraja enemiga seleccionada no es válida****");
+							Methods.initializeDeck(enemyDeck);
+						}
+						else {
+							System.out.println("El enemigo juega con:");
+							showDeck(enemyDeck);
+							Methods.startGame(in, playerDeck, enemyDeck);
+						}
 					} catch	(FileNotFoundException e){
 						System.out.println("****Ha habido un error al cargar la baraja enemiga****");
 					} 
@@ -583,11 +593,12 @@ public class InfortacticsUVa {
 						playerDeck[pos]=nextTroop;
 						pos++;
 						elixir -= getElixir(nextTroop.charAt(0));
+						//Comprueba que la baraja guardada no se pase de elixir
 						if (elixir<0)
 							valid = false;
 					}
 					leer.close();
-					//Si el formato no es correcto resetea el mazo y el elixir
+					//Si la baraja del fichero contiene algún error resetea el mazo y el elixir
 					if(!valid) {
 						System.out.println("****La baraja guardada no es válida****");
 						Methods.initializeDeck(playerDeck);
