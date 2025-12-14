@@ -378,6 +378,12 @@ public class InfortacticsUVa {
 		return elixir;
 	}
 
+	/**
+	 * Método principal que gestiona la ejecución del juego.
+	 * Inicializa los mazos, gestiona el menú de opciones e integra la carga de ficheros 
+	 * con la lógica de la partida.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		String[] playerDeck = new String[(Assets.BOARD_ROWS/2)*Assets.BOARD_COLUMNS];
 		String[] enemyDeck = new String[(Assets.BOARD_ROWS/2)*Assets.BOARD_COLUMNS];
@@ -458,6 +464,7 @@ public class InfortacticsUVa {
 				char troop=' ';
 				Methods.flushScreen();
 				do {
+					// Comprueba si el mazo cargado anteriormente es válido
 					if(!checkDeck(playerDeck)) {
 						Methods.flushScreen();
 						System.out.println("****Su mazo guardado es inválido****");
@@ -576,6 +583,8 @@ public class InfortacticsUVa {
 						playerDeck[pos]=nextTroop;
 						pos++;
 						elixir -= getElixir(nextTroop.charAt(0));
+						if (elixir<0)
+							valid = false;
 					}
 					leer.close();
 					//Si el formato no es correcto resetea el mazo y el elixir
