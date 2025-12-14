@@ -488,6 +488,7 @@ public class InfortacticsUVa {
 					do {
 						//pregunta tropa
 						do {
+							Methods.initializeDeck(enemyDeck);
 							Methods.createGameDeck(playerDeck, enemyDeck, gameDeck);
 							printBoard(gameDeck);
 							System.out.println();
