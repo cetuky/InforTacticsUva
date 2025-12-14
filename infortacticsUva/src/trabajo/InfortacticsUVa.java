@@ -589,7 +589,7 @@ public class InfortacticsUVa {
 					leer.close();
 					//Si el formato no es correcto resetea el mazo y el elixir
 					if(!valid) {
-						System.out.println("****El formato de la baraja guardada no es válido****");
+						System.out.println("****La baraja guardada no es válida****");
 						Methods.initializeDeck(playerDeck);
 						elixir = Assets.INITIAL_ELIXIR;
 					}
